@@ -238,6 +238,7 @@ private
 	int	  dir;					
 	int wallCheck = 0;
 	byte hurt = false;
+	byte memButtonJump = false;
 begin
 load_fpg("actor.fpg");
 graph = 1;
@@ -262,14 +263,22 @@ loop
 		this.vX *= 0.8;
 		this.state = 0;
 	end;
-	if (key(_up) && this.vY == 0)
-		this.vY += -6;
+	if (key(_up) )
+		if (!memButtonJump)
+			if (grounded)
+				this.vY += -4;
+			else
+				this.vY += (this.vY*0.1);
+			end;
+		end;
+	else
+		memButtonJump = !grounded;		
 	end;
 	
 	//gravedad 
 	this.vY += grav;
 	grounded = false;
-	
+		
 	//colisiones con mundo
 	for (wallCheck=0;wallCheck<wallNum;wallCheck++)
 					

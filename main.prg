@@ -148,11 +148,23 @@ private
 	int gameState = SPLASH_ST;
 	int idFont;
 	int flickering = 0;
+	int skyDw[4];
 begin
 	Scale_resolution = "0" + cResX*2 + "0" + CResY*2;
 	set_mode(cResX,cResY,16);
 	set_fps(60,0);
+		
+	//pintamos fondo
 	map_clear(0,0,SKY_COLOR);
+	drawing_z(255);
+	drawing_color(SKY_COLOR+4226);
+	skyDw[0] = draw_box(0,5,cResX,7);
+	skyDw[1] = draw_box(0,9,cResX,11);
+	skyDw[2] = draw_box(0,13,cResX,41);
+	drawing_color(SKY_COLOR+(4226*2));
+	skyDw[3] = draw_box(0,7,cResX,9);
+	skyDw[4] = draw_box(0,11,cResX,13);
+	
 	//carga recursos
 	idFont 			= load_fnt("fuente.fnt");
 	sndJump 		= load_wav("jump.ogg");
@@ -189,6 +201,16 @@ begin
 				misile1();
 				idActor = player1();
 				play_song(sndMusic,0);
+				//pintamos fondo
+				map_clear(0,0,SKY_COLOR);
+				drawing_z(255);
+				drawing_color(SKY_COLOR+4226);
+				skyDw[0] = draw_box(0,5,cResX,7);
+				skyDw[1] = draw_box(0,9,cResX,11);
+				skyDw[2] = draw_box(0,13,cResX,41);
+				drawing_color(SKY_COLOR+(4226*2));
+				skyDw[3] = draw_box(0,7,cResX,9);
+				skyDw[4] = draw_box(0,11,cResX,13);
 				gameState = PLAY_ST;
 			end;
 			case PLAY_ST:
@@ -217,6 +239,9 @@ begin
 				stop_song();
 				play_wav(sndExplosion,0,1);
 				signal(all_process,s_freeze);
+				for (i=0;i<5;i++)
+					delete_draw(skyDw[i]);
+				end;
 				while (flickering < 5)
 					map_clear(0,0,rgb(255,0,0));
 					wait(10);
@@ -225,7 +250,16 @@ begin
 					flickering++;
 				end;
 				flickering = 0;
+				//pintamos fondo
 				map_clear(0,0,SKY_COLOR);
+				drawing_z(255);
+				drawing_color(SKY_COLOR+4226);
+				skyDw[0] = draw_box(0,5,cResX,7);
+				skyDw[1] = draw_box(0,9,cResX,11);
+				skyDw[2] = draw_box(0,13,cResX,41);
+				drawing_color(SKY_COLOR+(4226*2));
+				skyDw[3] = draw_box(0,7,cResX,9);
+				skyDw[4] = draw_box(0,11,cResX,13);
 				wait(50);
 				let_me_alone();
 				delete_draw(0);
@@ -234,6 +268,16 @@ begin
 					wall[i].memBox = false;
 				end;
 				write_var(idFont,10,10,0,strScore);
+				//pintamos fondo
+				map_clear(0,0,SKY_COLOR);
+				drawing_z(255);
+				drawing_color(SKY_COLOR+4226);
+				skyDw[0] = draw_box(0,5,cResX,7);
+				skyDw[1] = draw_box(0,9,cResX,11);
+				skyDw[2] = draw_box(0,13,cResX,41);
+				drawing_color(SKY_COLOR+(4226*2));
+				skyDw[3] = draw_box(0,7,cResX,9);
+				skyDw[4] = draw_box(0,11,cResX,13);
 				gVelX = cVelX;
 				gScrollX = cScrollX;
 				difficulty = 0;

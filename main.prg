@@ -112,7 +112,12 @@ global
 	int wallNum=0;
 	int score = 0;
 	int difficulty = 0;
-	
+	//sound
+	int sndJump;
+	int sndExplosion;
+	int sndMusic;
+	int sndBeep;
+	int sndLaser;
 end;
 
 //declaraciones
@@ -148,13 +153,21 @@ begin
 	set_mode(cResX,cResY,16);
 	set_fps(60,0);
 	map_clear(0,0,SKY_COLOR);
-	idFont = load_fnt("fuente.fnt");
+	//carga recursos
+	idFont 			= load_fnt("fuente.fnt");
+	sndJump 		= load_wav("jump.ogg");
+	sndExplosion 	= load_wav("explosion.ogg");
+	sndMusic		= load_wav("music.ogg");
+	sndBeep			= load_wav("beep.ogg");
+	sndLaser		= load_wav("laser.ogg");
+	
 	misile1();
 	
 	loop
 		switch (gameState)
 			case SPLASH_ST:
-				if (key(_enter))		
+				if (key(_enter))	
+					play_wav(sndBeep,0,1);
 					gameState = RESET_ST;
 				end;
 				if (key(_esc))
@@ -174,7 +187,8 @@ begin
 				gScrollX = cScrollX;
 				write_var(idFont,10,10,0,strScore);
 				misile1();
-				idActor = player1();			
+				idActor = player1();
+				play_song(sndMusic,0);
 				gameState = PLAY_ST;
 			end;
 			case PLAY_ST:
@@ -200,6 +214,8 @@ begin
 				
 			end;
 			case GAMEOVER_ST:
+				stop_song();
+				play_wav(sndExplosion,0,1);
 				signal(all_process,s_freeze);
 				while (flickering < 5)
 					map_clear(0,0,rgb(255,0,0));
@@ -268,6 +284,7 @@ loop
 		if (!memButtonJump)
 			if (grounded)
 				this.vY += -4;
+				play_wav(sndJump,0,2);
 			else
 				this.vY += (this.vY*0.1);
 			end;
@@ -438,6 +455,7 @@ loop
 	//cada cierto tiempo, lanza un laser
 	if (rand(1,100) == 10 && !exists(TYPE missile2))
 		missile2();
+		play_wav(sndLaser,0,3);
 	end;
 	
 	//incrementamos puntuacion

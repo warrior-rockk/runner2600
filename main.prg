@@ -249,6 +249,7 @@ this.alto = 14;
 this.fX = x;
 this.fY = y;
 this.state = IDLE_ST;
+
 loop
 	//movimiento
 	if (key(_right) && this.vX < 2)

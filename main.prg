@@ -154,7 +154,7 @@ begin
 	Scale_resolution = "0" + cResX*2 + "0" + CResY*2;
 	set_mode(cResX,120,16);
 	set_fps(60,0);
-    define_region(1,0,10,cResX,110);
+    define_region(1,0,10,cResX,100);
 	region=1;
 	//pintamos fondo
 	map_clear(0,0,SKY_COLOR);
@@ -282,7 +282,7 @@ begin
 				skyDw[4] = draw_box(0,iniSky+6,cResX,iniSky+8);
 				gVelX = cVelX;
 				gScrollX = cScrollX;
-				difficulty = 0;
+				difficulty =0;
 				misile1();
 				gameState = SPLASH_ST;
 			end;
@@ -471,7 +471,9 @@ loop
 		
 	if (frameCount % gScrollX == 0)
 		for (i=0;i<wallNum;i++)
+			
 			wall[i].x -= gVelX;
+			
 			move_draw(wall[i].dw,wall[i].x-(wall[i].w>>1),wall[i].y-(wall[i].h>>1));
 			
 			if (not wall[i].memBox && wallNum<cMaxWalls)

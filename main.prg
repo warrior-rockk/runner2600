@@ -81,7 +81,7 @@ end;
 //constantes
 Const
 	cResX = 160;
-	cResY = 120;
+	cResY = 110;
 	cVelX = 1;
 	cScrollX = 3;
 	cMinSpace = 20;
@@ -149,21 +149,23 @@ private
 	int idFont;
 	int flickering = 0;
 	int skyDw[4];
+	int iniSky = 17;
 begin
 	Scale_resolution = "0" + cResX*2 + "0" + CResY*2;
-	set_mode(cResX,cResY,16);
+	set_mode(cResX,120,16);
 	set_fps(60,0);
-		
+    define_region(1,0,10,cResX,110);
+	region=1;
 	//pintamos fondo
 	map_clear(0,0,SKY_COLOR);
 	drawing_z(255);
 	drawing_color(SKY_COLOR+4226);
-	skyDw[0] = draw_box(0,5,cResX,7);
-	skyDw[1] = draw_box(0,9,cResX,11);
-	skyDw[2] = draw_box(0,13,cResX,41);
+	skyDw[0] = draw_box(0,iniSky,cResX,iniSky+2);
+	skyDw[1] = draw_box(0,iniSky+4,cResX,iniSky+6);
+	skyDw[2] = draw_box(0,iniSky+8,cResX,iniSky+30);
 	drawing_color(SKY_COLOR+(4226*2));
-	skyDw[3] = draw_box(0,7,cResX,9);
-	skyDw[4] = draw_box(0,11,cResX,13);
+	skyDw[3] = draw_box(0,iniSky+2,cResX,iniSky+4);
+	skyDw[4] = draw_box(0,iniSky+6,cResX,iniSky+8);
 	
 	//carga recursos
 	idFont 			= load_fnt("fuente.fnt");
@@ -205,12 +207,12 @@ begin
 				map_clear(0,0,SKY_COLOR);
 				drawing_z(255);
 				drawing_color(SKY_COLOR+4226);
-				skyDw[0] = draw_box(0,5,cResX,7);
-				skyDw[1] = draw_box(0,9,cResX,11);
-				skyDw[2] = draw_box(0,13,cResX,41);
+				skyDw[0] = draw_box(0,iniSky,cResX,iniSky+2);
+				skyDw[1] = draw_box(0,iniSky+4,cResX,iniSky+6);
+				skyDw[2] = draw_box(0,iniSky+8,cResX,iniSky+30);
 				drawing_color(SKY_COLOR+(4226*2));
-				skyDw[3] = draw_box(0,7,cResX,9);
-				skyDw[4] = draw_box(0,11,cResX,13);
+				skyDw[3] = draw_box(0,iniSky+2,cResX,iniSky+4);
+				skyDw[4] = draw_box(0,iniSky+6,cResX,iniSky+8);
 				gameState = PLAY_ST;
 			end;
 			case PLAY_ST:
@@ -254,12 +256,12 @@ begin
 				map_clear(0,0,SKY_COLOR);
 				drawing_z(255);
 				drawing_color(SKY_COLOR+4226);
-				skyDw[0] = draw_box(0,5,cResX,7);
-				skyDw[1] = draw_box(0,9,cResX,11);
-				skyDw[2] = draw_box(0,13,cResX,41);
+				skyDw[0] = draw_box(0,iniSky,cResX,iniSky+2);
+				skyDw[1] = draw_box(0,iniSky+4,cResX,iniSky+6);
+				skyDw[2] = draw_box(0,iniSky+8,cResX,iniSky+30);
 				drawing_color(SKY_COLOR+(4226*2));
-				skyDw[3] = draw_box(0,7,cResX,9);
-				skyDw[4] = draw_box(0,11,cResX,13);
+				skyDw[3] = draw_box(0,iniSky+2,cResX,iniSky+4);
+				skyDw[4] = draw_box(0,iniSky+6,cResX,iniSky+8);
 				wait(50);
 				let_me_alone();
 				delete_draw(0);
@@ -272,12 +274,12 @@ begin
 				map_clear(0,0,SKY_COLOR);
 				drawing_z(255);
 				drawing_color(SKY_COLOR+4226);
-				skyDw[0] = draw_box(0,5,cResX,7);
-				skyDw[1] = draw_box(0,9,cResX,11);
-				skyDw[2] = draw_box(0,13,cResX,41);
+				skyDw[0] = draw_box(0,iniSky,cResX,iniSky+2);
+				skyDw[1] = draw_box(0,iniSky+4,cResX,iniSky+6);
+				skyDw[2] = draw_box(0,iniSky+8,cResX,iniSky+30);
 				drawing_color(SKY_COLOR+(4226*2));
-				skyDw[3] = draw_box(0,7,cResX,9);
-				skyDw[4] = draw_box(0,11,cResX,13);
+				skyDw[3] = draw_box(0,iniSky+2,cResX,iniSky+4);
+				skyDw[4] = draw_box(0,iniSky+6,cResX,iniSky+8);
 				gVelX = cVelX;
 				gScrollX = cScrollX;
 				difficulty = 0;
@@ -309,7 +311,7 @@ this.alto = 14;
 this.fX = x;
 this.fY = y;
 this.state = IDLE_ST;
-
+region = 1;
 loop
 	//movimiento
 	if (key(_right) && this.vX < 2)
@@ -435,6 +437,7 @@ private
 	int i;
 	int framecount=0;
 begin
+region = 1;
 rand_seed(time());
 drawing_color(rgb(WORLD_COLOR_R-(difficulty*16),WORLD_COLOR_G-(difficulty*16),WORLD_COLOR_B-(difficulty*16)));
 

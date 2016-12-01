@@ -169,7 +169,7 @@ begin
 	idFont 			= load_fnt("fuente.fnt");
 	sndJump 		= load_wav("jump.ogg");
 	sndExplosion 	= load_wav("explosion.ogg");
-	sndMusic		= load_wav("music.ogg");
+	sndMusic		= load_song("music.ogg");
 	sndBeep			= load_wav("beep.ogg");
 	sndLaser		= load_wav("laser.ogg");
 	

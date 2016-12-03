@@ -49,7 +49,8 @@ import "mod_wm";
 #define SPLASH_ST   0
 #define RESET_ST	1
 #define PLAY_ST		2
-#define GAMEOVER_ST	3
+#define LOSELIFE_ST 3
+#define GAMEOVER_ST	4
 
 //estados player
 #define IDLE_ST 0
@@ -89,7 +90,6 @@ Const
 	cMinH     = 10;
 	cMaxH     = 50;
 	cMinW     = 12;
-	cMaxW     = 50;
 	cMaxWalls = 10;
 	cMinMissileY = 30;
 	cMaxMissileY = 80;
@@ -99,6 +99,8 @@ end;
 
 //globales
 global
+	int cMaxW     = 50;
+	int probLaser = 100;
 	gVelX = cVelX;
 	gScrollX = cScrollX;
 	struct wall[cMaxWalls] 
@@ -118,6 +120,8 @@ global
 	int sndMusic;
 	int sndBeep;
 	int sndLaser;
+	int difficultySel=1;
+	int gameLifes = 3;
 end;
 
 //declaraciones
@@ -150,6 +154,8 @@ private
 	int flickering = 0;
 	int skyDw[4];
 	int iniSky = 17;
+	int txtDiff;
+	int iniDwLife = 140;
 begin
 	Scale_resolution = "0" + cResX*2 + "0" + CResY*2;
 	set_mode(cResX,120,16);
@@ -187,6 +193,28 @@ begin
 				if (key(_esc))
 					exit("",0);
 				end;
+				if (key(_d))
+					difficultySel<3 ? difficultySel++ : difficultySel=1;
+					switch(difficultySel)
+						case 1:
+							cMaxW     = 50;
+							probLaser = 100;
+						end;
+						case 2:
+							cMaxW     = 35;
+							probLaser = 60;
+						end;
+						case 3:
+							cMaxW     = 25;
+							probLaser = 45;
+						end;
+					end
+					
+					txtDiff = write(idFont,80,60,0,difficultySel);
+					play_wav(sndBeep,0,1);
+					wait(50);
+					delete_text(txtDiff);
+				end;
 			end;
 			case RESET_ST:
 				let_me_alone();
@@ -213,6 +241,14 @@ begin
 				drawing_color(SKY_COLOR+(4226*2));
 				skyDw[3] = draw_box(0,iniSky+2,cResX,iniSky+4);
 				skyDw[4] = draw_box(0,iniSky+6,cResX,iniSky+8);
+				//pintamos vidas
+				drawing_color(rgb(192,192,192));
+				drawing_z(254);
+				iniDwLife = 140;
+				for (i=0;i<gameLifes;i++)
+					draw_box(iniDwLife,26,iniDwLife+2,28);
+					iniDwLife+=4;
+				end;
 				gameState = PLAY_ST;
 			end;
 			case PLAY_ST:
@@ -228,7 +264,8 @@ begin
 				
 				//chequea la muerte del player
 				if (idActor.this.state == DEAD_ST)
-					gameState = GAMEOVER_ST;
+					gameLifes--;
+					gameLifes < 1 ? gameState = GAMEOVER_ST : gameState = LOSELIFE_ST;
 				end;
 				
 				//reset
@@ -236,6 +273,67 @@ begin
 					gameState = RESET_ST;					
 				end;				
 				
+			end;
+			case LOSELIFE_ST:
+				stop_song();
+				play_wav(sndExplosion,0,1);
+				signal(all_process,s_freeze);
+				for (i=0;i<5;i++)
+					delete_draw(skyDw[i]);
+				end;
+				while (flickering < 5)
+					map_clear(0,0,rgb(255,0,0));
+					wait(10);
+					map_clear(0,0,rgb(255,255,0));
+					wait(10);
+					flickering++;
+				end;
+				flickering = 0;
+				//pintamos fondo
+				map_clear(0,0,SKY_COLOR);
+				drawing_z(255);
+				drawing_color(SKY_COLOR+4226);
+				skyDw[0] = draw_box(0,iniSky,cResX,iniSky+2);
+				skyDw[1] = draw_box(0,iniSky+4,cResX,iniSky+6);
+				skyDw[2] = draw_box(0,iniSky+8,cResX,iniSky+30);
+				drawing_color(SKY_COLOR+(4226*2));
+				skyDw[3] = draw_box(0,iniSky+2,cResX,iniSky+4);
+				skyDw[4] = draw_box(0,iniSky+6,cResX,iniSky+8);
+				wait(50);
+				let_me_alone();
+				delete_draw(0);
+				delete_text(all_text);
+				for (i=0;i<wallNum;i++)
+					wall[i].memBox = false;
+				end;
+				write_var(idFont,10,10,0,strScore);
+				//pintamos fondo
+				map_clear(0,0,SKY_COLOR);
+				drawing_z(255);
+				drawing_color(SKY_COLOR+4226);
+				skyDw[0] = draw_box(0,iniSky,cResX,iniSky+2);
+				skyDw[1] = draw_box(0,iniSky+4,cResX,iniSky+6);
+				skyDw[2] = draw_box(0,iniSky+8,cResX,iniSky+30);
+				drawing_color(SKY_COLOR+(4226*2));
+				skyDw[3] = draw_box(0,iniSky+2,cResX,iniSky+4);
+				skyDw[4] = draw_box(0,iniSky+6,cResX,iniSky+8);
+				
+				for (i=0;i<wallNum;i++)
+					wall[i].memBox = false;
+				end;
+				//pintamos vidas
+				drawing_color(rgb(192,192,192));
+				drawing_z(254);
+				iniDwLife = 140;
+				for (i=0;i<gameLifes;i++)
+					draw_box(iniDwLife,26,iniDwLife+2,28);
+					iniDwLife+=4;
+				end;
+				write_var(idFont,10,10,0,strScore);
+				misile1();
+				idActor = player1();
+				play_song(sndMusic,0);
+				gameState = PLAY_ST;
 			end;
 			case GAMEOVER_ST:
 				stop_song();
@@ -283,6 +381,7 @@ begin
 				gVelX = cVelX;
 				gScrollX = cScrollX;
 				difficulty =0;
+				gameLifes = 3;
 				misile1();
 				gameState = SPLASH_ST;
 			end;
@@ -326,7 +425,7 @@ loop
 		this.vX *= 0.8;
 		this.state = 0;
 	end;
-	if (key(_up) )
+	if (key(_up) || key(_space) )
 		if (!memButtonJump)
 			if (grounded)
 				this.vY += -4;
@@ -502,7 +601,7 @@ loop
 	end;
 	
 	//cada cierto tiempo, lanza un laser
-	if (rand(1,100) == 10 && !exists(TYPE missile2))
+	if (rand(1,probLaser) == 10 && !exists(TYPE missile2))
 		missile2();
 		play_wav(sndLaser,0,3);
 	end;

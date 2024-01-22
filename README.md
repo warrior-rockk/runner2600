@@ -5,6 +5,6 @@ El juego está desarrollado en BennuGD [https://www.bennugd.org](https://www.benn
 
 El juego es un endless-run con generación aleatoria de los niveles y dificultad procedural.
 
-[Snapshot del juego](https://github.com/warrior-rockk/runner2600/blob/master/snap.png)
+![Snapshot del juego](https://github.com/warrior-rockk/runner2600/blob/master/snap.png)
 
 

@@ -156,9 +156,10 @@ private
 	int iniSky = 17;
 	int txtDiff;
 	int iniDwLife = 140;
-begin
-	Scale_resolution = "0" + cResX*2 + "0" + CResY*2;
-	set_mode(cResX,120,16);
+begin	
+	set_title("Runner 2600");	
+	Scale_resolution = "0" + cResX*4 + "0" + CResY*4;
+	set_mode(cResX,120,16);	
 	set_fps(60,0);
     define_region(1,0,10,cResX,100);
 	region=1;
@@ -269,8 +270,8 @@ begin
 				end;
 				
 				//reset
-				if (key(_r))
-					gameState = RESET_ST;					
+				if (key(_ESC))
+					exit("",0);					
 				end;				
 				
 			end;

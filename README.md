@@ -8,13 +8,15 @@ The game is developed in BennuGD [https://www.bennugd.org](https://www.bennugd.o
 
 The game is a endless-run with random level generation and procedural difficulty.
 
-
+You can build the game with `.\vendor\bgdc.exe -s .\vendor\bgdi.exe -a main.prg`
 
 Juego ganador de la jam del foro de BennuGD [https://forum.bennugd.org/index.php/topic,4390.0.html](https://forum.bennugd.org/index.php/topic,4390.0.html) consistente en hacer un juego inspirado y con las limitaciones de la consola Atari 2600.
 
 El juego está desarrollado en BennuGD [https://www.bennugd.org](https://www.bennugd.org), un fork del conocido Div Games Studio.
 
 El juego es un endless-run con generación aleatoria de los niveles y dificultad procedural.
+
+Puedes compilar el juego con `.\vendor\bgdc.exe -s .\vendor\bgdi.exe -a main.prg`
 
 
 
